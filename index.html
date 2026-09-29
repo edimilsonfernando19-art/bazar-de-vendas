@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bazar Nice</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f3f4f6;
+    color: #222;
+    padding-bottom: 70px;
+}
+
+header {
+    background: #111827;
+    color: white;
+    padding: 15px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.search {
+    margin-top: 12px;
+}
+
+.search input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 15px;
+}
+
+.card {
+    background: white;
+    border-radius: 14px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.create-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #16a34a;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.create-button {
+    flex: 1;
+    padding: 13px;
+    border-radius: 25px;
+    border: 1px solid #ddd;
+    background: #f8f8f8;
+    text-align: left;
+    cursor: pointer;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.actions button {
+    flex: 1;
+    padding: 11px;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    background: #f0fdf4;
+}
+
+.product-image {
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+.product-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 12px;
+}
+
+.price {
+    color: #16a34a;
+    font-size: 19px;
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+.location {
+    color: #666;
+    margin-top: 5px;
+}
+
+.description {
+    margin-top: 10px;
+    line-height: 1.5;
+}
+
+.contact {
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px;
+    border: none;
+    border-radius: 9px;
+    background: #16a34a;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.delete {
+    margin-top: 8px;
+    background: #fee2e2;
+    color: #b91c1c;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.65);
+    z-index: 100;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.modal-content {
+    max-width: 600px;
+    margin: 30px auto;
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.modal h2 {
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin-bottom: 13px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    outline: none;
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.photo-box {
+    border: 2px dashed #16a34a;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    background: #f0fdf4;
+}
+
+.photo-box input {
+    display: none;
+}
+
+.preview {
+    width: 100%;
+    max-height: 350px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-top: 12px;
+    display: none;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.modal-buttons button {
+    flex: 1;
+    padding: 13px;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+}
+
+.publish {
+    background: #16a34a;
+    color: white;
+}
+
+.cancel {
+    background: #e5e7eb;
+}
+
+.empty {
+    text-align: center;
+    color: #777;
+    padding: 30px;
+}
+
+nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: white;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 20;
+}
+
+nav button {
+    border: none;
+    background: none;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+nav span {
+    display: block;
+    font-size: 21px;
+}
+
+@media (min-width: 700px) {
+    .feed {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .feed .card {
+        margin-bottom: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-top">
+        <div class="logo">🛍️ Bazar Nice</div>
+        <button onclick="openModal()" style="background:#16a34a;color:white;border:0;padding:10px 14px;border-radius:9px;">
+            ＋
+        </button>
+    </div>
+
+    <div class="search">
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Pesquisar produtos ou serviços..."
+            oninput="searchProducts()"
+        >
+    </div>
+</header>
+
+<main class="container">
+
+    <div class="card">
+        <div class="create-box">
+            <div class="avatar">BN</div>
+
+            <button class="create-button" onclick="openModal()">
+                O que você quer vender?
+            </button>
+        </div>
+
+        <div class="actions">
+            <button onclick="openModal()">📷 Foto</button>
+            <button onclick="openModal()">🛍️ Produto</button>
+            <button onclick="openModal()">💼 Serviço</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>🔥 Publicações recentes</h2>
+    </div>
+
+    <div id="feed" class="feed"></div>
+
+</main>
+
+<nav>
+    <button onclick="scrollToTop()">
+        <span>🏠</span>
+        Início
+    </button>
+
+    <button onclick="openModal()">
+        <span>➕</span>
+        Publicar
+    </button>
+
+    <button onclick="focusSearch()">
+        <span>🔎</span>
+        Pesquisar
+    </button>
+</nav>
+
+
+<!-- MODAL DE PUBLICAÇÃO -->
+
+<div class="modal" id="modal">
+
+    <div class="modal-content">
+
+        <h2>➕ Nova publicação</h2>
+
+        <div class="form-group">
+            <label>Foto do produto</label>
+
+            <label class="photo-box">
+                📷
+                <br>
+                <strong>Adicionar foto</strong>
+                <br>
+                <small>Toque aqui para escolher uma imagem</small>
+
+                <input
+                    type="file"
+                    id="photoInput"
+                    accept="image/*"
+                    onchange="previewPhoto(event)"
+                >
+            </label>
+
+            <img id="preview" class="preview">
+        </div>
+
+        <div class="form-group">
+            <label>Nome do produto ou serviço</label>
+
+            <input
+                type="text"
+                id="productName"
+                placeholder="Ex: iPhone 13"
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Preço</label>
+
+            <input
+                type="text"
+                id="price"
+                placeholder="Ex: 350.000 Kz"
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Localização</label>
+
+            <input
+                type="text"
+                id="location"
+                placeholder="Ex: Luena, Moxico"
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Tipo</label>
+
+            <select id="type">
+                <option value="Produto">Produto</option>
+                <option value="Serviço">Serviço</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Descrição</label>
+
+            <textarea
+                id="description"
+                placeholder="Descreva o produto ou serviço..."
+            ></textarea>
+        </div>
+
+        <div class="modal-buttons">
+            <button class="cancel" onclick="closeModal()">
+                Cancelar
+            </button>
+
+            <button class="publish" onclick="publish()">
+                Publicar
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+
+let products = JSON.parse(
+    localStorage.getItem("bazarProducts") || "[]"
+);
+
+let selectedImage = "";
+
+
+/* ABRIR MODAL */
+
+function openModal() {
+    document.getElementById("modal").style.display = "block";
+}
+
+
+/* FECHAR MODAL */
+
+function closeModal() {
+
+    document.getElementById("modal").style.display = "none";
+
+    document.getElementById("productName").value = "";
+    document.getElementById("price").value = "";
+    document.getElementById("location").value = "";
+    document.getElementById("description").value = "";
+
+    document.getElementById("photoInput").value = "";
+
+    selectedImage = "";
+
+    const preview = document.getElementById("preview");
+
+    preview.src = "";
+    preview.style.display = "none";
+}
+
+
+/* PRÉ-VISUALIZAR FOTO */
+
+function previewPhoto(event) {
+
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+
+        alert("Escolha uma imagem válida.");
+
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+
+        selectedImage = e.target.result;
+
+        const preview = document.getElementById("preview");
+
+        preview.src = selectedImage;
+
+        preview.style.display = "block";
+    };
+
+    reader.readAsDataURL(file);
+}
+
+
+/* PUBLICAR */
+
+function publish() {
+
+    const name =
+        document.getElementById("productName").value.trim();
+
+    const price =
+        document.getElementById("price").value.trim();
+
+    const location =
+        document.getElementById("location").value.trim();
+
+    const description =
+        document.getElementById("description").value.trim();
+
+    const type =
+        document.getElementById("type").value;
+
+
+    if (!name) {
+
+        alert("Digite o nome do produto ou serviço.");
+
+        return;
+    }
+
+
+    if (!price) {
+
+        alert("Digite o preço.");
+
+        return;
+    }
+
+
+    if (!selectedImage) {
+
+        alert("Adicione uma foto do produto.");
+
+        return;
+    }
+
+
+    const product = {
+
+        id: Date.now(),
+
+        name: name,
+
+        price: price,
+
+        location: location,
+
+        description: description,
+
+        type: type,
+
+        image: selectedImage,
+
+        date: new Date().toLocaleDateString("pt-AO")
+
+    };
+
+
+    products.unshift(product);
+
+
+    try {
+
+        localStorage.setItem(
+            "bazarProducts",
+            JSON.stringify(products)
+        );
+
+    } catch (error) {
+
+        alert(
+            "A imagem é muito grande. Escolha uma foto menor."
+        );
+
+        products.shift();
+
+        return;
+    }
+
+
+    closeModal();
+
+    renderProducts();
+
+    alert("Publicação criada com sucesso! 🎉");
+}
+
+
+/* MOSTRAR PRODUTOS */
+
+function renderProducts(list = products) {
+
+    const feed = document.getElementById("feed");
+
+    feed.innerHTML = "";
+
+
+    if (list.length === 0) {
+
+        feed.innerHTML = `
+            <div class="card empty">
+                Nenhuma publicação encontrada.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    list.forEach(product => {
+
+        const card = document.createElement("div");
+
+        card.className = "card";
+
+
+        card.innerHTML = `
+
+            <div style="font-size:13px;color:#777;">
+                ${product.type} • ${product.date}
+            </div>
+
+            <img
+                src="${product.image}"
+                class="product-image"
+                alt="${escapeHTML(product.name)}"
+            >
+
+            <div class="product-title">
+                ${escapeHTML(product.name)}
+            </div>
+
+            <div class="price">
+                ${escapeHTML(product.price)}
+            </div>
+
+            <div class="location">
+                📍 ${escapeHTML(product.location || "Localização não informada")}
+            </div>
+
+            <div class="description">
+                ${escapeHTML(product.description || "")}
+            </div>
+
+            <button
+                class="contact"
+                onclick="contactSeller('${product.id}')"
+            >
+                💬 Contactar vendedor
+            </button>
+
+            <button
+                class="delete"
+                onclick="deleteProduct(${product.id})"
+            >
+                🗑️ Apagar publicação
+            </button>
+        `;
+
+
+        feed.appendChild(card);
+
+    });
+}
+
+
+/* PESQUISA */
+
+function searchProducts() {
+
+    const query =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    if (!query) {
+
+        renderProducts();
+
+        return;
+    }
+
+
+    const filtered = products.filter(product =>
+
+        product.name.toLowerCase().includes(query) ||
+
+        product.description.toLowerCase().includes(query) ||
+
+        product.location.toLowerCase().includes(query) ||
+
+        product.type.toLowerCase().includes(query)
+
+    );
+
+
+    renderProducts(filtered);
+}
+
+
+/* APAGAR */
+
+function deleteProduct(id) {
+
+    const confirmDelete =
+        confirm("Deseja apagar esta publicação?");
+
+
+    if (!confirmDelete) return;
+
+
+    products =
+        products.filter(product => product.id !== id);
+
+
+    localStorage.setItem(
+        "bazarProducts",
+        JSON.stringify(products)
+    );
+
+
+    renderProducts();
+}
+
+
+/* CONTACTAR */
+
+function contactSeller(id) {
+
+    const product =
+        products.find(item => item.id == id);
+
+
+    if (!product) return;
+
+
+    alert(
+        "Contacto do vendedor será adicionado na próxima versão."
+    );
+}
+
+
+/* SEGURANÇA DO TEXTO */
+
+function escapeHTML(text) {
+
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* PESQUISA */
+
+function focusSearch() {
+
+    document
+        .getElementById("searchInput")
+        .focus();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* TOPO */
+
+function scrollToTop() {
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* INICIALIZAR */
+
+renderProducts();
+
+</script>
+
+</body>
+</html>
